@@ -1,13 +1,14 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/internal/Subject";
+import {st} from "@angular/core/src/render3";
 
 @Injectable()
 export class RequestService {
 
   authSubject = new Subject<boolean>();
 
-  private accessToken: string;
+  accessToken: string;
 
   constructor(
     private httpClient: HttpClient
@@ -22,14 +23,16 @@ export class RequestService {
   }
 
   getAccessToken(code: string) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    headers.append('Authorization', 'Basic Zm9vQ2xpZW50SWQ6c2VjcmV0');
+    console.log(code);
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Basic Zm9vQ2xpZW50SWQ6c2VjcmV0')
+      .set('Content-Type', 'application/x-www-form-urlencoded');
     const body = new URLSearchParams();
-    body.append('grant_type', 'authorization_code');
-    body.append('code', code);
-    body.append('redirect_uri', 'http://localhost:8081/auth/code');
-    body.append('client_id', 'fooClientId');
-    return this.httpClient.post<any>('http://localhost:8081/auth/oauth/token', body.toString(), { observe: 'body', headers: headers, withCredentials: true })
+      body.append('grant_type', 'authorization_code');
+      body.append('code', code);
+      body.append('redirect_uri', 'http://localhost:8081/auth/code');
+      body.append('client_id', 'fooClientId');
+    return this.httpClient.post<AuthResponse>('http://localhost:8081/auth/oauth/token', body.toString(), { observe: 'body', headers: headers })
       .subscribe(
         (response) => {
           this.accessToken = response.access_token;
@@ -42,8 +45,16 @@ export class RequestService {
 
   getData() {
     const headers = new HttpHeaders()
-      // .set('Authorization', 'Bearer ' + this.accessToken);
-    return this.httpClient.get('http://localhost:8081/auth/prot/user', { observe: 'body', headers: headers, responseType: "text" }) //, withCredentials: true
+      .set('Authorization', 'Bearer ' + this.accessToken);
+    return this.httpClient.get('http://localhost:8081/auth/protected/me', { observe: 'body', headers: headers, responseType: "text" })
   }
 
+}
+
+export interface AuthResponse {
+  access_token: string;
+  token_type: string;
+  refresh_token: string;
+  expires_in: number;
+  scope: string;
 }

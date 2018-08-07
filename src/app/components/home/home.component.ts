@@ -12,6 +12,7 @@ import {CookieService} from "ngx-cookie";
 export class HomeComponent implements OnInit {
 
   message: string;
+  response: string = 'loading..';
   isLogged = false;
 
   constructor(private requestService: RequestService,
@@ -28,6 +29,7 @@ export class HomeComponent implements OnInit {
       .subscribe(
         (logged) => {
           if (logged) {
+            this.message = this.requestService.accessToken;
             this.onData()
           }
         }
@@ -51,10 +53,10 @@ export class HomeComponent implements OnInit {
     this.requestService.getData()
       .subscribe(
         (response) => {
-          this.message = response;
+          this.response = response;
         },
         () => {
-          this.message = 'NOT authorized!';
+          this.response = 'not AUTH!';
         }
       );
   }
