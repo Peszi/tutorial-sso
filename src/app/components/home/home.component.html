@@ -1,0 +1,10 @@
+<div class="card shadow" style="width: 300px">
+  <div class="card-header">
+    <p class="m-0 text-center text-uppercase">Welcome</p>
+  </div>
+  <div class="card-body">
+    <p class="text-center border rounded p-1">{{ this.message }}</p>
+    <button class="btn btn-block btn-sm btn-primary mb-1" (click)="onButton()">{{ !this.isLogged ? 'Sign In' : 'Sign Out' }}</button>
+    <button class="btn btn-block btn-sm btn-primary mb-1" (click)="onPrint()">print cookies</button>
+  </div>
+</div>

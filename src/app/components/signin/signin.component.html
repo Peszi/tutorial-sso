@@ -1,0 +1,16 @@
+<div class="card shadow" style="width: 300px">
+  <div class="card-header">
+    <p class="m-0 text-center text-uppercase">Sign In</p>
+  </div>
+  <div class="card-body">
+    <form class="" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group input-group-sm mb-1">
+        <input type="text" class="form-control" id="name" placeholder="name" formControlName="name">
+      </div>
+      <div class="form-group input-group-sm mb-1">
+        <input type="password" class="form-control" id="password" placeholder="password" formControlName="password">
+      </div>
+      <button type="submit" class="btn btn-block btn-sm btn-primary">submit</button>
+    </form>
+  </div>
+</div>
