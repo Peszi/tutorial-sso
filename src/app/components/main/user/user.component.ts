@@ -1,15 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {RequestService} from "../request.service";
+import { Component, OnInit } from '@angular/core';
+import {RequestService} from "../../request.service";
 import {CookieService} from "ngx-cookie";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.css']
 })
-export class HomeComponent implements OnInit {
+export class UserComponent implements OnInit {
 
   message: string;
   response: string = 'loading..';
@@ -35,10 +34,6 @@ export class HomeComponent implements OnInit {
         }
       );
     this.isLogged = !!this.cookieService.get('Idea-7f4db146');
-  }
-
-  onButton() {
-    window.location.href = 'http://localhost:8081/auth/oauth/authorize?response_type=code&client_id=fooClientId&redirect_uri=http://localhost:8081/auth/code';
   }
 
   onPrint() {

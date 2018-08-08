@@ -2,6 +2,8 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Subject} from "rxjs/internal/Subject";
 import {st} from "@angular/core/src/render3";
+import {Router} from "@angular/router";
+import {map} from "rxjs/operators";
 
 @Injectable()
 export class RequestService {
@@ -10,16 +12,27 @@ export class RequestService {
 
   accessToken: string;
 
-  constructor(
-    private httpClient: HttpClient
-  ) {}
+  constructor(private router: Router,
+              private httpClient: HttpClient) {}
 
   signInRequest(userData: {name: string, password: string}) {
-      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/x-www-form-urlencoded');
       const body = new URLSearchParams();
       body.append('username', userData.name);
       body.append('password', userData.password);
-      return this.httpClient.post('http://localhost:8081/auth/signin', body.toString(), { observe: 'body', headers: headers, withCredentials: true, responseType: "text" })
+      return this.httpClient.post<RouterRedirect>('http://localhost:8081/auth/signin', body.toString(), { observe: 'body', headers: headers, withCredentials: true })
+        .pipe(map((redirect) => {
+            this.router.navigate([redirect.endpoint], { queryParams: { code: redirect.code } });
+        }));
+  }
+
+  signOutRequest() {
+    return this.httpClient.post('http://localhost:8081/auth/signout', null, { observe: 'body', withCredentials: true, responseType: "text" })
+      .pipe(map((redirect) => {
+          this.router.navigate(['../app-home']);
+          this.authSubject.next(false)
+      }));
   }
 
   getAccessToken(code: string) {
@@ -38,8 +51,7 @@ export class RequestService {
           this.accessToken = response.access_token;
           this.authSubject.next(true);
           console.log('success');
-        },
-        () => this.authSubject.next(false)
+        }
       );
   }
 
@@ -49,6 +61,10 @@ export class RequestService {
     return this.httpClient.get('http://localhost:8081/auth/protected/me', { observe: 'body', headers: headers, responseType: "text" })
   }
 
+}
+
+export interface RouterRedirect {
+  endpoint: string; code: string;
 }
 
 export interface AuthResponse {

@@ -1,0 +1,6 @@
+<div class="fixed-top bg-primary border-bottom border-primary shadow-sm p-2 d-flex align-items-center justify-content-center" style="height: 48px">
+  <div class="w-100" style="max-width: 1000px">
+    <button class="btn btn-sm btn-light float-right" (click)="onSignIn()" *ngIf="!isLogged">Sign In</button>
+    <button class="btn btn-sm btn-danger float-right" (click)="onSignOut()" *ngIf="isLogged">Sign Out</button>
+  </div>
+</div>

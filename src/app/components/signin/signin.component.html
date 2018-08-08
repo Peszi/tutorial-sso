@@ -1,6 +1,6 @@
 <div class="card shadow" style="width: 300px">
   <div class="card-header">
-    <p class="m-0 text-center text-uppercase">Sign In</p>
+    <p class="m-0 text-center">Sign In</p>
   </div>
   <div class="card-body">
     <form class="" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -11,6 +11,7 @@
         <input type="password" class="form-control" id="password" placeholder="password" formControlName="password">
       </div>
       <button type="submit" class="btn btn-block btn-sm btn-primary">submit</button>
+      <div class="w-100 text-center text-danger" *ngIf="loggingError"><small>Bad credentials!</small></div>
     </form>
   </div>
 </div>
