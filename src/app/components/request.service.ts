@@ -30,7 +30,7 @@ export class RequestService {
   signOutRequest() {
     return this.httpClient.post('http://localhost:8081/auth/signout', null, { observe: 'body', withCredentials: true, responseType: "text" })
       .pipe(map((redirect) => {
-          this.router.navigate(['../app-home']);
+          this.router.navigate(['../home']);
           this.authSubject.next(false)
       }));
   }
